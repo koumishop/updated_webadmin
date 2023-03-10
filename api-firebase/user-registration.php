@@ -42,6 +42,7 @@ APIs for Multi Vendor
 5. register_device
 6. register
 7. upload_profile
+8. delete_profile
 
 -------------------------------------------
 
@@ -172,6 +173,48 @@ if (isset($_POST['type']) && $_POST['type'] != '' && $_POST['type'] == 'edit-pro
 
         $response["error"]   = false;
         $response["message"] = "Le profil a été mis à jour avec succès.";
+    }
+    print_r(json_encode($response));
+    return false;
+}
+// Faire la mise à jour de l'utilisatur
+if (isset($_POST['type']) && $_POST['type'] != '' && $_POST['type'] == 'delete-profile') {
+    /*
+    2. delete_profile
+        accesskey:90336
+        type:delete-profile
+        user_id:178
+        email:admin@gmail.com
+        mobile:1234567890
+    */
+
+    if (empty($_POST['user_id']) || empty($_POST['email']) || empty($_POST['mobile'])) {
+        $response['error'] = true;
+        $response['message'] = "Passez tous les champs !";
+        print_r(json_encode($response));
+        return false;
+    }
+
+    $id     = $db->escapeString($fn->xss_clean($_POST['user_id']));
+    $email  = $db->escapeString($fn->xss_clean($_POST['email']));
+    $mobile = $db->escapeString($fn->xss_clean($_POST['mobile']));
+
+    $sql = 'select * from users where id =' . $id;
+    $db->sql($sql);
+    $res = $db->getResult();
+
+    if (!empty($res)) {
+        $sql = 'DELETE `users` WHERE `id`=' . $id . 'AND `mobile`=' . $mobile ;
+        $db->sql($sql);
+        
+        $res = $db->getResult();
+        if (!empty($res)) {
+            $response["error"]   = false;
+            $response["message"] = "Le profil a été supprimer avec succès.";
+        }else {
+            $response["error"]   = true;
+            $response["message"] = "Le profil n'a pas été supprimer.";
+        }
     }
     print_r(json_encode($response));
     return false;
