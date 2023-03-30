@@ -330,7 +330,7 @@ try{
         // return false;
         
         //if (empty($name) && empty($email) && empty($mobile) && empty($password)&& empty($sex)&& empty($date_of_birth)) {
-            if (!empty($name) && !empty($email) && !empty($mobile) && !empty($password)&& !empty($sex)&& !empty($date_of_birth)) {
+            if (!empty($name) && !empty($email) && !empty($mobile) && !empty($password)) { //&& !empty($sex)&& !empty($date_of_birth)
             for ($i = 0; $i < 10; $i++) {
                 $referral_code .= $chars[mt_rand(0, strlen($chars) - 1)];
             }
